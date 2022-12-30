@@ -84,7 +84,7 @@ class FXSpotCurve(object):
 
         # Eg. we construct AUDJPY via AUDJPY directly
         if construct_via_currency == 'no':
-            base_depo_tickers = [x[0:3] + self._depo_tenor for x in md_request.tickers]
+            base_depo_tickers = [x[:3] + self._depo_tenor for x in md_request.tickers]
             terms_depo_tickers = [x[3:6] + self._depo_tenor for x in md_request.tickers]
 
             depo_tickers = list(set(base_depo_tickers + terms_depo_tickers))
@@ -116,7 +116,7 @@ class FXSpotCurve(object):
             total_return_indices = []
 
             for tick in md_request.tickers:
-                base = tick[0:3]
+                base = tick[:3]
                 terms = tick[3:6]
 
                 md_request_base = MarketDataRequest(md_request=md_request)
@@ -193,18 +193,18 @@ class FXSpotCurve(object):
 
         for cross in cross_fx:
             # Get the spot series, base deposit
-            base_deposit = market_df[cross[0:3] + depo_tenor + "." + field].to_frame()
+            base_deposit = market_df[cross[:3] + depo_tenor + "." + field].to_frame()
             terms_deposit = market_df[cross[3:6] + depo_tenor + "." + field].to_frame()
 
             # Eg. if we specify USDUSD
-            if cross[0:3] == cross[3:6]:
+            if cross[:3] == cross[3:6]:
                 total_return_index_df_agg.append(pd.DataFrame(100, index=base_deposit.index, columns=[cross + "-tot.close"]))
             else:
                 carry = base_deposit.join(terms_deposit, how='inner')
 
                 spot = market_df[cross + "." + field].to_frame()
 
-                base_daycount = self.get_day_count_conv(cross[0:3])
+                base_daycount = self.get_day_count_conv(cross[:3])
                 terms_daycount = self.get_day_count_conv(cross[4:6])
 
                 # Align the base & terms deposits series to spot (this should already be done by construction)
@@ -219,7 +219,7 @@ class FXSpotCurve(object):
                 spot = spot[cross + "." + field].to_frame()
 
                 spot_vals = spot[cross + "." + field].values
-                base_deposit_vals = carry[cross[0:3] + depo_tenor + "." + field].values
+                base_deposit_vals = carry[cross[:3] + depo_tenor + "." + field].values
                 terms_deposit_vals = carry[cross[3:6] + depo_tenor + "." + field].values
 
                 # Calculate the time difference between each data point (flooring it to whole days, because carry

@@ -63,7 +63,7 @@ class AbstractVolSurface(ABC):
         min_z = None
         max_z = None
 
-        for i in range(0, len(dates)):
+        for i in range(len(dates)):
 
             self.build_vol_surface(dates[i])
 

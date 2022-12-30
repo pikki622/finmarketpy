@@ -85,14 +85,12 @@ class Backtest(object):
         strategy_rets.columns = [x + '_strat_rets' for x in strategy_rets.columns]
         signal_df.columns = [x + '_final_signal' for x in signal_df.columns]
 
-        for i in range(0, len(further_df)):
+        for i in range(len(further_df)):
             further_df[i].columns = [x + '_' + further_df_labels[i] for x in further_df[i].columns]
 
         flatten_df = [asset_a_df, asset_a_df_entry, asset_rets_df, strategy_rets, signal_df]
 
-        for f in further_df:
-            flatten_df.append(f)
-
+        flatten_df.extend(iter(further_df))
         return calculations.join(flatten_df, how='outer')
 
     def calculate_trading_PnL(self, br, asset_a_df, signal_df, contract_value_df, run_in_parallel):

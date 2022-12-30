@@ -42,7 +42,7 @@ run_example = 2
 from finmarketpy.curve.rates.fxforwardspricer import FXForwardsPricer
 
 ###### Value forwards for AUDUSD for odd days
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
 
     cross = 'AUDUSD'
     fx_forwards_tenors = ['1W', '2W', '3W', '1M']
@@ -50,11 +50,17 @@ if run_example == 1 or run_example == 0:
     fx_forwards_to_print = ['1W', '2W']
 
     # Get AUDUSD data for spot, forwards + depos
-    md_request = MarketDataRequest(start_date='01 Jan 2020', finish_date='01 Feb 2020',
-                                   data_source='bloomberg', cut='NYC', category='fx-forwards-market',
-                                   tickers=cross,
-                                   cache_algo='cache_algo_return', fx_forwards_tenor=fx_forwards_tenors,
-                                   base_depos_currencies=[cross[0:3], cross[3:6]])
+    md_request = MarketDataRequest(
+        start_date='01 Jan 2020',
+        finish_date='01 Feb 2020',
+        data_source='bloomberg',
+        cut='NYC',
+        category='fx-forwards-market',
+        tickers=cross,
+        cache_algo='cache_algo_return',
+        fx_forwards_tenor=fx_forwards_tenors,
+        base_depos_currencies=[cross[:3], cross[3:6]],
+    )
 
     market_df = market.fetch_market(md_request=md_request)
 
@@ -64,30 +70,34 @@ if run_example == 1 or run_example == 0:
     interpolated_forwards_df = fx_forwards_price.price_instrument(cross, market_df.index, delivery_dates,
         market_df=market_df, fx_forwards_tenor_for_interpolation =['1W', '2W'])
 
-    interpolated_forwards_df[cross + ".delivery"] = delivery_dates.values
+    interpolated_forwards_df[f"{cross}.delivery"] = delivery_dates.values
 
     print(interpolated_forwards_df)
 
-    market_cols = [cross + ".close"]
+    market_cols = [f"{cross}.close"]
 
-    for f in fx_forwards_to_print:
-        market_cols.append(cross + f + '.close')
-
+    market_cols.extend(cross + f + '.close' for f in fx_forwards_to_print)
     print(market_df[market_cols])
 
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
 
     cross = 'AUDUSD'
     fx_forwards_tenors = ['1W', '2W', '3W', '1M']
     fx_forwards_to_print = ['1M']
 
     # Get AUDUSD data for forwards (spot, forwards points and base depos)
-    md_request = MarketDataRequest(start_date='01 Jan 2020', finish_date='01 Feb 2020',
-                                   data_source='bloomberg', cut='NYC', category='fx-forwards-market',
-                                   tickers=cross,
-                                   cache_algo='cache_algo_return', fx_forwards_tenor=fx_forwards_tenors,
-                                   base_depos_tenor=fx_forwards_tenors,
-                                   base_depos_currencies=[cross[0:3], cross[3:6]])
+    md_request = MarketDataRequest(
+        start_date='01 Jan 2020',
+        finish_date='01 Feb 2020',
+        data_source='bloomberg',
+        cut='NYC',
+        category='fx-forwards-market',
+        tickers=cross,
+        cache_algo='cache_algo_return',
+        fx_forwards_tenor=fx_forwards_tenors,
+        base_depos_tenor=fx_forwards_tenors,
+        base_depos_currencies=[cross[:3], cross[3:6]],
+    )
 
     market_df = market.fetch_market(md_request=md_request)
 
@@ -99,21 +109,13 @@ if run_example == 2 or run_example == 0:
 
     print(implied_depo_df)
 
-    market_cols = [cross + ".close"]
+    market_cols = [f"{cross}.close"]
 
-    for f in fx_forwards_to_print:
-        market_cols.append(cross + f + '.close')
-
+    market_cols.extend(cross + f + '.close' for f in fx_forwards_to_print)
     market_cols.append("USD1M.close")
     print(market_df[market_cols])
 
-    # Download implied deposits (via FX forwards) for base currency (AUD) from Bloomberg
-    # Note: some implied deposits tenors might have no data in it
-    tickers = []
-
-    for t in fx_forwards_tenors:
-        tickers.append(cross[0:3] + "I" + t)
-
+    tickers = [cross[:3] + "I" + t for t in fx_forwards_tenors]
     md_request = MarketDataRequest(start_date='01 Jan 2020', finish_date='01 Feb 2020',
                                    data_source='bloomberg', cut='NYC',
                                    tickers=tickers,

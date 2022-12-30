@@ -162,7 +162,7 @@ class VolStats(object):
 
         new_cols = []
 
-        for i in range(0, len(cols_to_change)):
+        for i in range(len(cols_to_change)):
             temp_col = list(cols_to_change[i])
             temp_col[6] = 'U'
 
@@ -178,14 +178,14 @@ class VolStats(object):
 
         vrp = implied_vol.join(realized_vol, how='outer')
         vrp[asset + "VRP" + tenor_label + ".close"] = vrp[asset + "U" + tenor_label + "." + field] \
-                                                      - vrp[asset + "H" + tenor_label + "." + field]
+                                                          - vrp[asset + "H" + tenor_label + "." + field]
 
         ## Construct "traditional" volatility risk premium,
         # so implied does not cover the same period as realized volatility
         vrp = vrp.join(implied_unaligned, how='outer')
 
         vrp[asset + "VRPV" + tenor_label + ".close"] = \
-            vrp[asset + "V" + tenor_label + "." + field] - vrp[asset + "H" + tenor_label + "." + field]
+                vrp[asset + "V" + tenor_label + "." + field] - vrp[asset + "H" + tenor_label + "." + field]
 
         return vrp
 

@@ -156,7 +156,7 @@ class FXForwardsCurve(object):
             total_return_indices = []
 
             for tick in md_request.tickers:
-                base = tick[0:3]
+                base = tick[:3]
                 terms = tick[3:6]
 
                 md_request_base = MarketDataRequest(md_request=md_request)
@@ -263,7 +263,7 @@ class FXForwardsCurve(object):
         for cross in cross_fx:
 
             # Eg. if we specify USDUSD
-            if cross[0:3] == cross[3:6]:
+            if cross[:3] == cross[3:6]:
                 total_return_index_df_agg.append(
                     pd.DataFrame(100, index=forwards_market_df.index, columns=[cross + "-forward-tot.close"]))
             else:
@@ -331,7 +331,7 @@ class FXForwardsCurve(object):
                         mtm[i] = fx_forwards_pricer.price_instrument(cross, horizon_date[i], delivery_date[i-1],
                             market_df=forwards_market_df,
                             fx_forwards_tenor_for_interpolation=fx_forwards_tenor_for_interpolation) \
-                                [cross + '-interpolated-outright-forward.' + field].values
+                                    [cross + '-interpolated-outright-forward.' + field].values
                     # else:
                     #    mtm[i] = interpolated_forward[i]
 

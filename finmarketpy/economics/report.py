@@ -36,11 +36,9 @@ class Report(object):
 
         if pretty_index is None: pretty_index = x_variable_names
 
-        # strip out the field(s) from the regression output which we want
-        stats_df = Calculations.strip_linear_regression_output(pretty_index, stats, statistic)
-        # stats_df = stats_df.sort_index()
-
-        return stats_df
+        return Calculations.strip_linear_regression_output(
+            pretty_index, stats, statistic
+        )
 
     def plot_single_var_regression(self, y, x, y_variable_names, x_variable_names, statistic,
                                    tag = 'stats',
