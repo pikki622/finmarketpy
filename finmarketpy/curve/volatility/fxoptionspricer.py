@@ -188,8 +188,8 @@ class FXOptionsPricer(AbstractPricer):
                     elif strike[i] == 'atmf':
                         # Quoted tenor, no need to interpolate
                         strike[i] = float(fx_vol_surface.get_all_market_data()[cross + ".close"][horizon_date[i]]) \
-                                          + (float(fx_vol_surface.get_all_market_data()[cross + tenor + ".close"][horizon_date[i]]) \
-                                    / self._fx_forwards_pricer.get_forwards_divisor(cross[3:6]))
+                                              + (float(fx_vol_surface.get_all_market_data()[cross + tenor + ".close"][horizon_date[i]]) \
+                                        / self._fx_forwards_pricer.get_forwards_divisor(cross[3:6]))
 
                         # Interpolate vol later
 
@@ -215,8 +215,10 @@ class FXOptionsPricer(AbstractPricer):
                     try:
                         fx_vol_surface.build_vol_surface(horizon_date[i])
                     except:
-                        logger.warn("Failed to build vol surface for " + str(horizon_date) + ", won't be able to interpolate vol")
-                    # fx_vol_surface.extract_vol_surface(num_strike_intervals=None)
+                        logger.warn(
+                            f"Failed to build vol surface for {str(horizon_date)}, won't be able to interpolate vol"
+                        )
+                                # fx_vol_surface.extract_vol_surface(num_strike_intervals=None)
 
                 # If an implied vol hasn't been provided, interpolate that one, fit the vol surface (if hasn't already been
                 # done)
@@ -232,8 +234,14 @@ class FXOptionsPricer(AbstractPricer):
                 logger.info("Pricing " + contract_type_ + " option, horizon date = " + str(horizon_date[i]) + ", expiry date = "
                              + str(expiry_date[i]))
 
-                option = FinFXVanillaOption(self._findate(expiry_date[i]), strike[i],
-                                            cross, contract_type_fin_, notional, cross[0:3])
+                option = FinFXVanillaOption(
+                    self._findate(expiry_date[i]),
+                    strike[i],
+                    cross,
+                    contract_type_fin_,
+                    notional,
+                    cross[:3],
+                )
 
                 spot[i] = fx_vol_surface.get_spot()
 
@@ -280,7 +288,7 @@ class FXOptionsPricer(AbstractPricer):
             contract_type_fin = FinOptionTypes.EUROPEAN_PUT
 
             _price_option(contract_type, contract_type_fin)
-        elif contract_type == 'european-straddle' or contract_type == 'european-strangle':
+        elif contract_type in ['european-straddle', 'european-strangle']:
             contract_type = 'european-call'
             contract_type_fin = FinOptionTypes.EUROPEAN_CALL
 

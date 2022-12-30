@@ -52,15 +52,27 @@ def prepare_indices(cross, df_option_tot=None, df_option_tc=None, df_spot_tot=No
     df_list = []
 
     if df_option_tot is not None:
-        df_list.append(pd.DataFrame(df_option_tot[cross + '-option-tot.close']))
-        df_list.append(pd.DataFrame(df_option_tot[cross + '-option-delta-tot.close']))
-        df_list.append(pd.DataFrame(df_option_tot[cross + '-delta-pnl-index.close']))
-
+        df_list.extend(
+            (
+                pd.DataFrame(df_option_tot[cross + '-option-tot.close']),
+                pd.DataFrame(df_option_tot[cross + '-option-delta-tot.close']),
+                pd.DataFrame(df_option_tot[cross + '-delta-pnl-index.close']),
+            )
+        )
     if df_option_tc is not None:
-        df_list.append(pd.DataFrame(df_option_tc[cross + '-option-tot-with-tc.close']))
-        df_list.append(pd.DataFrame(df_option_tc[cross + '-option-delta-tot-with-tc.close']))
-        df_list.append(pd.DataFrame(df_option_tc[cross + '-delta-pnl-index-with-tc.close']))
-
+        df_list.extend(
+            (
+                pd.DataFrame(
+                    df_option_tc[cross + '-option-tot-with-tc.close']
+                ),
+                pd.DataFrame(
+                    df_option_tc[cross + '-option-delta-tot-with-tc.close']
+                ),
+                pd.DataFrame(
+                    df_option_tc[cross + '-delta-pnl-index-with-tc.close']
+                ),
+            )
+        )
     if df_spot_tot is not None:
         df_list.append(df_spot_tot)
 

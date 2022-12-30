@@ -221,7 +221,7 @@ class FXOptionsCurve(object):
             total_return_indices = []
 
             for tick in md_request.tickers:
-                base = tick[0:3]
+                base = tick[:3]
                 terms = tick[3:6]
 
                 md_request_base = MarketDataRequest(md_request=md_request)

@@ -47,7 +47,7 @@ market = Market(market_data_generator=MarketDataGenerator())
 run_example = 0
 
 ###### Calculate seasonal moves in Gold (using Bloomberg data)
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
     md_request = MarketDataRequest(
                 start_date = "01 Jan 1996",                         # start date
                 data_source = 'bloomberg',                          # use Bloomberg as data source
@@ -73,7 +73,7 @@ if run_example == 1 or run_example == 0:
     chart.plot(day_of_month_seasonality, style=style)
 
 ###### Calculate seasonal moves in FX vol (using Bloomberg data)
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
     tickers = ['EURUSDV1M', 'USDJPYV1M', 'GBPUSDV1M', 'AUDUSDV1M']
 
     md_request = MarketDataRequest(
@@ -102,7 +102,7 @@ if run_example == 2 or run_example == 0:
     chart.plot(day_of_month_seasonality, style=style)
 
 ###### Calculate seasonal moves in Gasoline (using Bloomberg data)
-if run_example == 3 or run_example == 0:
+if run_example in {3, 0}:
     md_request = MarketDataRequest(
                 start_date = "01 Jan 1996",                         # start date
                 data_source = 'bloomberg',                          # use Bloomberg as data source
@@ -128,7 +128,7 @@ if run_example == 3 or run_example == 0:
     chart.plot(day_of_month_seasonality, style=style)
 
 ###### Calculate seasonal moves in US non-farm payrolls (using Bloomberg data)
-if run_example == 4 or run_example == 0:
+if run_example in {4, 0}:
     # get the NFP NSA from ALFRED/FRED
     md_request = MarketDataRequest(
         start_date="01 Jun 2000",       # start date (download data over past decade)
@@ -153,7 +153,7 @@ if run_example == 4 or run_example == 0:
     chart.plot(month_seasonality, style=style)
 
 ###### Apply seasonal adjustment to NFP data and compare the seasonal adjustment by finmarketpy with that of BLS
-if run_example == 5 or run_example == 0:
+if run_example in {5, 0}:
     # get the NFP NSA from ALFRED/FRED
     md_request = MarketDataRequest(
         start_date="01 Jun 1980",       # start date (download data over past decade)

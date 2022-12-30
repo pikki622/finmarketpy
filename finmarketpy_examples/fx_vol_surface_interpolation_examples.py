@@ -45,7 +45,7 @@ run_example = 2
 
 ###### Fetch market data for pricing GBPUSD FX options over Brexit vote (ie. FX spot, FX forwards, FX deposits and FX vol quotes)
 ###### Show how to plot ATM 1M implied_vol vol time series
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
 
     # Download the whole all market data for GBPUSD for pricing options (vol surface)
     md_request = MarketDataRequest(start_date='01 May 2016', finish_date='01 Aug 2016',
@@ -65,7 +65,7 @@ if run_example == 1 or run_example == 0:
 
 ###### Fetch market data for pricing GBPUSD FX options over Brexit vote (ie. FX spot, FX forwards, FX deposits and FX vol quotes)
 ###### Construct volatility surface using FinancePy library underneath, using polynomial interpolation
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
 
     horizon_date = '23 Jun 2016'
     cross = 'GBPUSD'
@@ -119,7 +119,7 @@ if run_example == 2 or run_example == 0:
 
 ###### Fetch market data for pricing GBPUSD FX options over Brexit vote (ie. FX spot, FX forwards, FX deposits and FX vol quotes)
 ###### Do animation for vol surface
-if run_example == 3 or run_example == 0:
+if run_example in {3, 0}:
     # Download the whole all market data for GBPUSD for pricing options (vol surface)
     # Using LDN close data (CMPL)
     md_request = MarketDataRequest(start_date='01 Jun 2016', finish_date='30 Jul 2016',
@@ -157,7 +157,7 @@ if run_example == 3 or run_example == 0:
 
 ###### Fetch market data for pricing GBPUSD FX options over Brexit vote (ie. FX spot, FX forwards, FX deposits and FX vol quotes)
 ###### Get implied_vol vol for specific strikes interpolating across surface
-if run_example == 4 or run_example == 0:
+if run_example in {4, 0}:
     # Download the whole all market data for GBPUSD for pricing options (vol surface)
     md_request = MarketDataRequest(start_date='20 Jun 2016', finish_date='25 Jun 2016',
                                    data_source='bloomberg', cut='LDN', category='fx-vol-market',
@@ -186,7 +186,7 @@ if run_example == 4 or run_example == 0:
 ###### Fetch market data for pricing USDJPY FX options near 2020 US Presidential Election (03 Nov 2020)
 ###### (ie. FX spot, FX forwards, FX deposits and FX vol quotes)
 ###### Construct volatility surface using FinancePy library underneath, using polynomial interpolation
-if run_example == 5 or run_example == 0:
+if run_example in {5, 0}:
 
     horizon_date = '03 Nov 2020'
 

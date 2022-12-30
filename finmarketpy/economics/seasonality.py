@@ -57,7 +57,9 @@ class Seasonality(object):
                 temp_seasonality = calculations.average_by_hour_min_of_day_pretty_output(
                     data_frame[data_frame.index.year == i])
 
-            temp_seasonality.columns = commonman.postfix_list(temp_seasonality.columns.values, " " + str(i))
+            temp_seasonality.columns = commonman.postfix_list(
+                temp_seasonality.columns.values, f" {str(i)}"
+            )
 
             if intraday_seasonality is None:
                 intraday_seasonality = temp_seasonality
@@ -175,12 +177,6 @@ class Seasonality(object):
         seasons, trend = fit_seasons(series, period=likely_period)
         adjusted = adjust_seasons(series, seasons=seasons, period=likely_period)
 
-        if adjusted is None:
-            return numpy.nan
-
-        return adjusted[-1]
+        return numpy.nan if adjusted is None else adjusted[-1]
 
 
-if __name__ == '__main__':
-    # see seasonality_examples
-    pass

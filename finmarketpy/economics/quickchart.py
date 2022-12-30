@@ -52,22 +52,14 @@ class QuickChart(object):
         if isinstance(tickers, str):
             tickers = {tickers : tickers}
         elif isinstance(tickers, list):
-            tickers_dict = {}
-
-            for t in tickers:
-                tickers_dict[t] = t
-
+            tickers_dict = {t: t for t in tickers}
             tickers = tickers_dict
 
         if tickers_rhs is not None:
             if isinstance(tickers_rhs, str):
                 tickers_rhs = {tickers_rhs: tickers_rhs}
             elif isinstance(tickers, list):
-                tickers_rhs_dict = {}
-
-                for t in tickers_rhs:
-                    tickers_rhs_dict[t] = t
-
+                tickers_rhs_dict = {t: t for t in tickers_rhs}
                 tickers_rhs = tickers_rhs_dict
 
             tickers.update(tickers_rhs)

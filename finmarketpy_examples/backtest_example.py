@@ -24,7 +24,7 @@ from findatapy.timeseries import Calculations
 run_example = 0
 
 ###### backtest simple trend following strategy for FX spot basket
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
     # For backtest and loading data
     from finmarketpy.backtest import BacktestRequest, Backtest
     from findatapy.market import Market, MarketDataRequest, MarketDataGenerator
@@ -106,7 +106,9 @@ if run_example == 1 or run_example == 0:
     # Use the same data for generating signals
     backtest.calculate_trading_PnL(br, asset_df, signal_df, contract_value_df, run_in_parallel=False)
     port = backtest.portfolio_cum()
-    port.columns = [indicator + ' = ' + str(tech_params.sma_period) + ' ' + str(backtest.portfolio_pnl_desc()[0])]
+    port.columns = [
+        f'{indicator} = {tech_params.sma_period} {str(backtest.portfolio_pnl_desc()[0])}'
+    ]
     signals = backtest.portfolio_signal()
 
     # Print the last positions (we could also save as CSV etc.)
@@ -121,7 +123,7 @@ if run_example == 1 or run_example == 0:
     Chart().plot(port, style=style)
 
 ###### backtest simple trend following strategy for FX spot basket
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
     # For backtest and loading data
     from finmarketpy.backtest import Backtest, BacktestRequest
     from findatapy.market import Market, MarketDataRequest, MarketDataGenerator
@@ -189,7 +191,9 @@ if run_example == 2 or run_example == 0:
     # Use the same data for generating signals
     backtest.calculate_trading_PnL(br, asset_df, signal_df, contract_value_df=None, run_in_parallel=False)
     port = backtest.portfolio_cum()
-    port.columns = [indicator + ' = ' + str(tech_params.sma_period) + ' ' + str(backtest.portfolio_pnl_desc()[0])]
+    port.columns = [
+        f'{indicator} = {tech_params.sma_period} {str(backtest.portfolio_pnl_desc()[0])}'
+    ]
     signals = backtest.portfolio_signal()  # get final signals for each series
     returns = backtest.pnl()  # get P&L for each series
 

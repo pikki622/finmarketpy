@@ -24,7 +24,7 @@ Shows how to use QuickChart to quickly download data and plot it
 run_example = 0
 
 ###### Plot with Matplotlib
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
     from finmarketpy.economics import QuickChart
 
     # Plot with Matplotlib - S&P 500 on LHS y-axis and S&P 500 net long spec positioning on RHS y-axis
@@ -39,7 +39,7 @@ if run_example == 1 or run_example == 0:
                 start_date='01 Jan 2007', yoy=True, source='Bloomberg')
 
 ###### Plot with Plotly and Matplotlib
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
     from finmarketpy.economics import QuickChart
 
     # Plot with matplotlib - Major USD crosses reindexed from 100 in 2020

@@ -23,7 +23,10 @@ from chartpy import Chart, Style
 def plot_animated_vol_market():
     market = Market(market_data_generator=MarketDataGenerator())
 
-    cross = ['EURUSD']; start_date = '01 Mar 2017'; finish_date = '21 Apr 2017'; sampling = 'no'
+    cross = ['EURUSD']
+    start_date = '01 Mar 2017'
+    finish_date = '21 Apr 2017'
+    sampling = 'no'
 
     md_request = MarketDataRequest(start_date=start_date, finish_date=finish_date,
                                    data_source='bloomberg', cut='NYC', category='fx-implied-vol',
@@ -32,20 +35,27 @@ def plot_animated_vol_market():
     df = market.fetch_market(md_request)
     if sampling != 'no': df = df.resample(sampling).mean()
     fxvf = FXVolFactory()
-    df_vs = []
-
-    # Grab the vol surface for each date and create a dataframe for each date (could have used a panel)
-    for i in range(0, len(df.index)): df_vs.append(fxvf.extract_vol_surface_for_date(df, cross[0], i))
-
+    df_vs = [
+        fxvf.extract_vol_surface_for_date(df, cross[0], i)
+        for i in range(len(df.index))
+    ]
     # Do static plot for first day using Plotly
-    style = Style(title="FX vol surface of " + cross[0], source="chartpy", color='Blues')
+    style = Style(
+        title=f"FX vol surface of {cross[0]}", source="chartpy", color='Blues'
+    )
 
     Chart(df=df_vs[0], chart_type='surface', style=style).plot(engine='plotly')
 
     # Now do animation (TODO: need to fix animation in chartpy for matplotlib)
-    style = Style(title="FX vol surface of " + cross[0], source="chartpy", color='Blues',
-                    animate_figure=True, animate_titles=df.index,
-                    animate_frame_ms=500, normalize_colormap=False)
+    style = Style(
+        title=f"FX vol surface of {cross[0]}",
+        source="chartpy",
+        color='Blues',
+        animate_figure=True,
+        animate_titles=df.index,
+        animate_frame_ms=500,
+        normalize_colormap=False,
+    )
 
     Chart(df=df_vs, chart_type='surface', style=style).plot(engine='plotly')
 

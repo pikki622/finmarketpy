@@ -336,18 +336,18 @@ class FXForwardsPricer(AbstractPricer):
         spot_date = self._calendar.get_spot_date_from_horizon_date(market_df.index, cal)
 
         quoted_delivery_df, quoted_delivery_days_arr, forwards_points_arr, divisor = \
-            self._setup_forwards_calculation(cross, spot_date, market_df, quoted_delivery_df,
+                self._setup_forwards_calculation(cross, spot_date, market_df, quoted_delivery_df,
                                              fx_forwards_tenor)
 
         spot_arr = market_df[cross + '.close'].values
 
         outright_forwards_arr = np.vstack([spot_arr]*len(fx_forwards_tenor)).T + forwards_points_arr
 
-        base_conv = self.get_day_count_conv(cross[0:3])
+        base_conv = self.get_day_count_conv(cross[:3])
         terms_conv = self.get_day_count_conv(cross[3:6])
 
         # Infer base currency
-        if implied_currency == cross[0:3]:
+        if implied_currency == cross[:3]:
             original_currency = cross[3:6]
 
             depo_arr = market_df[[original_currency + d + '.close' for d in depo_tenor]].values / 100.0
@@ -363,18 +363,18 @@ class FXForwardsPricer(AbstractPricer):
 
         # Infer terms currency
         if implied_currency == cross[3:6]:
-            original_currency = cross[0:3]
+            original_currency = cross[:3]
 
             depo_arr = market_df[[original_currency + d + '.close' for d in depo_tenor]].values / 100.0
 
             implied_depo_arr = _infer_terms_currency_depo_numba(spot_arr, outright_forwards_arr, depo_arr, quoted_delivery_days_arr,
                                     base_conv, terms_conv, len(fx_forwards_tenor))
 
-            # for i in range(len(implied_depo_arr)):
-            #     for j, tenor in enumerate(fx_forwards_tenor):
-            #         implied_depo_arr[i,j] = ((outright_forwards_arr[i,j] / spot_arr[i]) *
-            #                                  (1 + depo_arr[i,j] * (quoted_delivery_days_arr[i,j] / base_conv)) - 1) \
-            #                                 / (quoted_delivery_days_arr[i,j] / terms_conv)
+                # for i in range(len(implied_depo_arr)):
+                #     for j, tenor in enumerate(fx_forwards_tenor):
+                #         implied_depo_arr[i,j] = ((outright_forwards_arr[i,j] / spot_arr[i]) *
+                #                                  (1 + depo_arr[i,j] * (quoted_delivery_days_arr[i,j] / base_conv)) - 1) \
+                #                                 / (quoted_delivery_days_arr[i,j] / terms_conv)
 
         return pd.DataFrame(index=market_df.index,
                             columns=[implied_currency + x + "-implied-depo.close" for x in fx_forwards_tenor],

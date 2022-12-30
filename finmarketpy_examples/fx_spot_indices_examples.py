@@ -43,7 +43,7 @@ from finmarketpy.curve.fxspotcurve import FXSpotCurve
 
 ###### Create total return indices plot for AUDJPY (from perspective of a USD investor)
 ###### Compare with AUDJPY FX spot and BBG constructed AUDJPY total return indices
-if run_example == 1 or run_example == 0:
+if run_example in {1, 0}:
 
     # Get AUDJPY total returns from perspective of USD investor (via AUDUSD & JPYUSD and AUD, USD & JPY overnight deposit rates)
     md_request = MarketDataRequest(start_date='01 Jan 1999', finish_date='01 Dec 2020',
@@ -83,7 +83,7 @@ if run_example == 1 or run_example == 0:
 
 ###### Create total return indices plot for GBPUSD with intraday and daily data (from perspective of a USD investor)
 ###### Compare intraday and daily total return indices
-if run_example == 2 or run_example == 0:
+if run_example in {2, 0}:
 
     import pytz
 
